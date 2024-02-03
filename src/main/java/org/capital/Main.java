@@ -37,7 +37,7 @@ public class Main extends JFrame {
     }
 
     private void insertNewRecord() {
-        String id = JOptionPane.showInputDialog("Enter ID:");
+        String id = JOptionPane.showInputDialog("Enter ID no:");
         String item = JOptionPane.showInputDialog("Enter Item:");
         String amount = JOptionPane.showInputDialog("Enter Amount:");
         String date = JOptionPane.showInputDialog("Enter Date:");
