@@ -3,10 +3,6 @@ package org.capital;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class Main extends JFrame {
     private final DefaultTableModel tableModel;
@@ -43,7 +39,12 @@ public class Main extends JFrame {
         String date = JOptionPane.showInputDialog("Enter Date:");
         String method = JOptionPane.showInputDialog("Enter Method:");
 
+<<<<<<< HEAD
         String[] newData = {id, item, amount, date, method};
+=======
+
+        String[] newData = {id, item, amount, date, method };
+>>>>>>> 3ade303 (update)
         tableModel.addRow(newData);
     }
 
