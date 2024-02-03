@@ -39,7 +39,7 @@ public class Main extends JFrame {
         String date = JOptionPane.showInputDialog("Enter Date:");
         String method = JOptionPane.showInputDialog("Enter Method:");
 
-        String[] newData = {id, item, amount, date, method };
+        String[] newData = {id, item, amount, date, method};
         tableModel.addRow(newData);
     }
 
