@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="521075a8-ea8e-4ccd-ac3b-ebf4c3bc0518" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/PostgresConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/AccountPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/BalancePanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/DashboardPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/HistoryPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/InsertPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/InsightsPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/PostgresConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/PostgresConnection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,10 +65,10 @@
     "Gradle.capital [:Main.main()].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "vg/preview",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/admin/OPENSOURCE/CAPITAL/capital",
+    "last_opened_file_path": "C:/Users/admin/OPENSOURCE/CAPITAL/CAPITAL-SW/capital",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",

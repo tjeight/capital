@@ -2,14 +2,13 @@ package org.capital;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.sql.*;
 
 public class Main extends JFrame {
     private final DefaultTableModel tableModel;
 
     public Main() {
-        setTitle("Expense Tracker");
+        setTitle("Capital");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
 
@@ -20,18 +19,16 @@ public class Main extends JFrame {
         tableModel.addColumn("Date");
         tableModel.addColumn("Method");
 
-        JTable table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
+        JTabbedPane tabbedPane = new JTabbedPane();
 
-        JButton addButton = new JButton("Insert New Record");
-        addButton.addActionListener(e -> insertNewRecord());
+        tabbedPane.addTab("Dashboard", new DashboardPanel(tableModel));
+        tabbedPane.addTab("Insert", new InsertPanel(tableModel));
+        tabbedPane.addTab("History", new HistoryPanel(tableModel));
+        tabbedPane.addTab("Balance", new BalancePanel());
+        tabbedPane.addTab("Insights", new InsightsPanel());
+        tabbedPane.addTab("Account", new AccountPanel());
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(addButton, BorderLayout.SOUTH);
-
-        add(panel);
+        add(tabbedPane);
 
         setVisible(true);
 
@@ -43,6 +40,7 @@ public class Main extends JFrame {
     }
 
     private void loadRecords() {
+        // Load existing records from the database
         try (Connection connection = PostgresConnection.getConnection()) {
             String sql = "SELECT * FROM expenses";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -61,38 +59,6 @@ public class Main extends JFrame {
             }
         } catch (SQLException e) {
             e.getMessage();
-        }
-    }
-
-    private void insertNewRecord() {
-        try {
-            String item = JOptionPane.showInputDialog("Enter Item:");
-            double amount = Double.parseDouble(JOptionPane.showInputDialog("Enter Amount:"));
-            String method = JOptionPane.showInputDialog("Enter Method:");
-
-            Object[] newData = {null, item, amount, null, method};
-            tableModel.addRow(newData);
-
-            try (Connection connection = PostgresConnection.getConnection()) {
-                String sql = "INSERT INTO expenses (Item, Amount, Method) VALUES (?, ?, ?) RETURNING ID, created_at";
-                try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                    statement.setString(1, item);
-                    statement.setDouble(2, amount);
-                    statement.setString(3, method);
-
-                    try (ResultSet resultSet = statement.executeQuery()) {
-                        if (resultSet.next()) {
-                            int generatedId = resultSet.getInt("ID");
-                            Timestamp createdAt = resultSet.getTimestamp("created_at");
-
-                            tableModel.setValueAt(generatedId, tableModel.getRowCount() - 1, 0);
-                            tableModel.setValueAt(createdAt, tableModel.getRowCount() - 1, 3);
-                        }
-                    }
-                }
-            }
-        } catch (NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid data.");
         }
     }
 }
