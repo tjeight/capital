@@ -13,7 +13,6 @@ public class BalancePanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Components for displaying balance from accounts
         JPanel balancePanel = createBalancePanel();
         add(balancePanel, BorderLayout.CENTER);
     }
@@ -22,36 +21,26 @@ public class BalancePanel extends JPanel {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
         panel.setBorder(BorderFactory.createTitledBorder("Account Balance"));
 
-        // Retrieve and display balance
         double balance = calculateBalance();
-        JLabel balanceLabel = new JLabel("Balance: $" + balance);
+        JLabel balanceLabel = new JLabel("Balance: " + balance);
         panel.add(balanceLabel);
 
-        // Display total number of transactions
         int totalTransactions = getTotalTransactions();
         JLabel transactionsLabel = new JLabel("Total Transactions: " + totalTransactions);
         panel.add(transactionsLabel);
 
-        // Display average transaction amount
-        double averageTransactionAmount = getAverageTransactionAmount();
-        JLabel averageLabel = new JLabel("Average Transaction Amount: $" + averageTransactionAmount);
-        panel.add(averageLabel);
-
-        // Display other balance-related information as needed
-        // ...
-
         return panel;
     }
 
-    private double calculateBalance() {
+    private double calculateMonthlySpend() {
         double balance = 0.0;
 
         try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT SUM(Amount) AS Balance FROM expenses";
+            String sql = "SELECT SUM(amount) AS balance FROM expenses";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        balance = resultSet.getDouble("Balance");
+                        balance = resultSet.getDouble("balance");
                     }
                 }
             }
@@ -60,6 +49,12 @@ public class BalancePanel extends JPanel {
         }
 
         return balance;
+    }
+
+    private double calculateBalance() {
+        double monthBalance = 10000000.00;
+
+        return monthBalance - calculateMonthlySpend();
     }
 
     private int getTotalTransactions() {
@@ -79,24 +74,5 @@ public class BalancePanel extends JPanel {
         }
 
         return totalTransactions;
-    }
-
-    private double getAverageTransactionAmount() {
-        double averageTransactionAmount = 0.0;
-
-        try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT AVG(Amount) AS AverageAmount FROM expenses";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        averageTransactionAmount = resultSet.getDouble("AverageAmount");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.getMessage();
-        }
-
-        return averageTransactionAmount;
     }
 }

@@ -21,7 +21,7 @@ public class Main extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        tabbedPane.addTab("Dashboard", new DashboardPanel(tableModel));
+        tabbedPane.addTab("Dashboard", new DashboardPanel());
         tabbedPane.addTab("Insert", new InsertPanel(tableModel));
         tabbedPane.addTab("History", new HistoryPanel(tableModel));
         tabbedPane.addTab("Balance", new BalancePanel());
@@ -40,7 +40,6 @@ public class Main extends JFrame {
     }
 
     private void loadRecords() {
-        // Load existing records from the database
         try (Connection connection = PostgresConnection.getConnection()) {
             String sql = "SELECT * FROM expenses";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {

@@ -8,24 +8,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardPanel extends JPanel {
-    private final DefaultTableModel tableModel;
 
-    public DashboardPanel(DefaultTableModel tableModel) {
-        this.tableModel = tableModel;
+    public DashboardPanel() {
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Components for recent transactions
         JPanel transactionsPanel = createRecentTransactionsPanel();
 
-        // Components for all financial details
         JPanel detailsPanel = createDetailsPanel();
 
-        // Create a horizontal split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, transactionsPanel, detailsPanel);
-        splitPane.setDividerLocation(150);  // Adjust the initial divider location
+        splitPane.setDividerLocation(150);
 
         add(splitPane, BorderLayout.CENTER);
     }
@@ -34,42 +31,82 @@ public class DashboardPanel extends JPanel {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Recent Transactions"));
 
-        JTable transactionsTable = new JTable(tableModel);
-        transactionsTable.setPreferredScrollableViewportSize(new Dimension(800, 150));
-        transactionsTable.setFillsViewportHeight(true);
+        List<Transaction> recentTransactions = getLast10Transactions();
+        String[] columnNames = {"Item", "Amount", "Method", "Date"};
 
-        JScrollPane scrollPane = new JScrollPane(transactionsTable);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        DefaultTableModel recentTransactionsModel = new DefaultTableModel(columnNames, 0);
+        JTable transactionsTable = new JTable(recentTransactionsModel);
+
+        for (Transaction transaction : recentTransactions) {
+            recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
+        }
+
+        transactionsTable.setEnabled(false);
+        transactionsTable.getTableHeader().setReorderingAllowed(false);
+        transactionsTable.setPreferredScrollableViewportSize(transactionsTable.getPreferredSize());
+
+        panel.add(new JScrollPane(transactionsTable), BorderLayout.CENTER);
 
         return panel;
     }
 
     private JPanel createDetailsPanel() {
-        JPanel panel = new JPanel(new GridLayout(2, 1, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(3, 1, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Finance Insights"));
 
-        // Retrieve and display Current balance
         double currentBalance = calculateBalance();
         JLabel currentBalanceLabel = new JLabel("Current Balance: " + currentBalance);
         panel.add(currentBalanceLabel);
 
-        // Monthly Spends
         double monthlySpend = calculateMonthlySpend();
         JLabel monthSpendLabel = new JLabel("Monthly Spends: " + monthlySpend);
         panel.add(monthSpendLabel);
 
+        Transaction biggestTransaction = getBiggestTransaction();
+        if (biggestTransaction != null) {
+            JLabel biggestTransactionLabel = new JLabel("Biggest Transaction: " + biggestTransaction.item + " - " + biggestTransaction.amount);
+            panel.add(biggestTransactionLabel);
+        } else {
+            JLabel noTransactionLabel = new JLabel("No major transactions available.");
+            panel.add(noTransactionLabel);
+        }
+
         return panel;
+    }
+
+    private List<Transaction> getLast10Transactions() {
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (Connection connection = PostgresConnection.getConnection()) {
+            String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY created_at DESC LIMIT 10";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String item = resultSet.getString("item");
+                        double amount = resultSet.getDouble("amount");
+                        String method = resultSet.getString("method");
+                        String createdAt = resultSet.getString("created_at");
+
+                        transactions.add(new Transaction(item, amount, method, createdAt));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+
+        return transactions;
     }
 
     private double calculateMonthlySpend() {
         double balance = 0.0;
 
         try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT SUM(Amount) AS Balance FROM expenses";
+            String sql = "SELECT SUM(amount) AS balance FROM expenses";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        balance = resultSet.getDouble("Balance");
+                        balance = resultSet.getDouble("balance");
                     }
                 }
             }
@@ -81,8 +118,35 @@ public class DashboardPanel extends JPanel {
     }
 
     private double calculateBalance() {
-        double MonthBalance = 10000.00;
+        double monthBalance = 10000000.00;
 
-        return MonthBalance - calculateMonthlySpend();
+        return monthBalance - calculateMonthlySpend();
+    }
+
+    private Transaction getBiggestTransaction() {
+        Transaction biggestTransaction = null;
+
+        try (Connection connection = PostgresConnection.getConnection()) {
+            String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY amount DESC LIMIT 1";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String item = resultSet.getString("item");
+                        double amount = resultSet.getDouble("amount");
+                        String method = resultSet.getString("method");
+                        String createdAt = resultSet.getString("created_at");
+
+                        biggestTransaction = new Transaction(item, amount, method, createdAt);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+
+        return biggestTransaction;
+    }
+
+    private record Transaction(String item, double amount, String method, String createdAt) {
     }
 }

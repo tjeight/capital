@@ -18,7 +18,6 @@ public class InsertPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Components for inserting new records
         JPanel formPanel = createInsertFormPanel();
         add(formPanel, BorderLayout.CENTER);
     }
@@ -28,7 +27,6 @@ public class InsertPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Labels and text fields in one column
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("Item:"), gbc);
@@ -63,7 +61,6 @@ public class InsertPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(methodField, gbc);
 
-        // Insert button in the center below these fields
         JButton insertButton = new JButton("Insert New Record");
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -78,7 +75,6 @@ public class InsertPanel extends JPanel {
 
     private void insertNewRecord(String item, String amount, String method) {
         try {
-            // Validate inputs
             if (item.isEmpty() || amount.isEmpty() || method.isEmpty()) {
                 throw new IllegalArgumentException("Please fill in all fields.");
             }
@@ -107,7 +103,6 @@ public class InsertPanel extends JPanel {
                 }
             }
 
-            // Clear input fields after successful insertion
             itemField.setText("");
             amountField.setText("");
             methodField.setText("");

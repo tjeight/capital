@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.*;
 
 public class HistoryPanel extends JPanel {
     private final DefaultTableModel tableModel;
@@ -14,7 +13,6 @@ public class HistoryPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Components for displaying transaction history
         JPanel historyPanel = createHistoryPanel();
         add(historyPanel, BorderLayout.CENTER);
     }
