@@ -7,7 +7,11 @@ import java.awt.*;
 import java.sql.*;
 
 public class InsertPanel extends JPanel {
+
     private final DefaultTableModel tableModel;
+    JTextField itemField = new JTextField();
+    JTextField amountField = new JTextField();
+    JTextField methodField = new JTextField();
 
     public InsertPanel(DefaultTableModel tableModel) {
         this.tableModel = tableModel;
@@ -20,28 +24,65 @@ public class InsertPanel extends JPanel {
     }
 
     private JPanel createInsertFormPanel() {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        JTextField itemField = new JTextField();
-        JTextField amountField = new JTextField();
-        JTextField methodField = new JTextField();
+        // Labels and text fields in one column
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Item:"), gbc);
 
-        panel.add(new JLabel("Item:"));
-        panel.add(itemField);
-        panel.add(new JLabel("Amount:"));
-        panel.add(amountField);
-        panel.add(new JLabel("Method:"));
-        panel.add(methodField);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(itemField, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        panel.add(new JLabel("Amount:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(amountField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        panel.add(new JLabel("Method:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(methodField, gbc);
+
+        // Insert button in the center below these fields
         JButton insertButton = new JButton("Insert New Record");
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(insertButton, gbc);
+
         insertButton.addActionListener(e -> insertNewRecord(itemField.getText(), amountField.getText(), methodField.getText()));
-        panel.add(insertButton);
 
         return panel;
     }
 
     private void insertNewRecord(String item, String amount, String method) {
         try {
+            // Validate inputs
+            if (item.isEmpty() || amount.isEmpty() || method.isEmpty()) {
+                throw new IllegalArgumentException("Please fill in all fields.");
+            }
+
             double parsedAmount = Double.parseDouble(amount);
 
             Object[] newData = {null, item, parsedAmount, null, method};
@@ -65,8 +106,14 @@ public class InsertPanel extends JPanel {
                     }
                 }
             }
-        } catch (NumberFormatException | SQLException e) {
-            JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid data.");
+
+            // Clear input fields after successful insertion
+            itemField.setText("");
+            amountField.setText("");
+            methodField.setText("");
+
+        } catch (SQLException | IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, "Invalid input. " + ex.getMessage());
         }
     }
 }

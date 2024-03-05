@@ -15,11 +15,24 @@ public class InsightsPanel extends JPanel {
     }
 
     private JPanel createInsightsPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
         panel.setBorder(BorderFactory.createTitledBorder("Financial Insights"));
 
-        // Create and add components for insights
-        // ...
+        // Sample financial insights (you can replace these with dynamic data)
+        JLabel insightLabel1 = new JLabel("Insight 1: Analyze your spending patterns.");
+        JLabel insightLabel2 = new JLabel("Insight 2: Consider creating an emergency fund.");
+        JLabel insightLabel3 = new JLabel("Insight 3: Review your investment strategy.");
+
+        // Customize label appearance if needed
+        Font insightFont = new Font("Arial", Font.PLAIN, 14);
+        insightLabel1.setFont(insightFont);
+        insightLabel2.setFont(insightFont);
+        insightLabel3.setFont(insightFont);
+
+        // Add components to the panel
+        panel.add(insightLabel1);
+        panel.add(insightLabel2);
+        panel.add(insightLabel3);
 
         return panel;
     }
