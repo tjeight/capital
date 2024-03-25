@@ -32,10 +32,37 @@ public class DashboardPanel extends JPanel {
         panel.setBorder(BorderFactory.createTitledBorder("Recent Transactions"));
 
         List<Transaction> recentTransactions = getLast10Transactions();
+        List<Transaction> newtransactions = new ArrayList<>();
         String[] columnNames = {"Item", "Amount", "Method", "Date"};
 
         DefaultTableModel recentTransactionsModel = new DefaultTableModel(columnNames, 0);
+        JButton button = new JButton("Refresh");
+        button.setPreferredSize(new Dimension(100, 30));
+        button.addActionListener(e -> {
+            try (Connection connection = PostgresConnection.getConnection()) {
+                String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY created_at DESC LIMIT 1";
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        while (resultSet.next()) {
+                            String item = resultSet.getString("item");
+                            double amount = resultSet.getDouble("amount");
+                            String method = resultSet.getString("method");
+                            String createdAt = resultSet.getString("created_at");
+
+                            newtransactions.add(new Transaction(item, amount, method, createdAt));
+                        }
+                    }
+                }
+            } catch (SQLException ec) {
+                ec.getMessage();
+            }
+
+            for (Transaction transaction : newtransactions) {
+                recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
+            }
+        });
         JTable transactionsTable = new JTable(recentTransactionsModel);
+        panel.add(button, BorderLayout.AFTER_LINE_ENDS);
 
         for (Transaction transaction : recentTransactions) {
             recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
