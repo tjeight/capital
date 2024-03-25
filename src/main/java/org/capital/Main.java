@@ -15,7 +15,7 @@ public class Main extends JFrame {
 
         Font customFont = new Font("JetBrains Mono", Font.PLAIN, 12);
         this.setFont(customFont);
-        this.setIconImage(new ImageIcon("../../assets/favicon.png").getImage());
+        this.setIconImage(new ImageIcon("../../assets/favicon.ico").getImage());
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("ID");
