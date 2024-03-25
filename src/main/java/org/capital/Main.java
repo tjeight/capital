@@ -2,6 +2,7 @@ package org.capital;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.sql.*;
 
 public class Main extends JFrame {
@@ -10,7 +11,11 @@ public class Main extends JFrame {
     public Main() {
         setTitle("Capital");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1200, 600);
+
+        Font customFont = new Font("JetBrains Mono", Font.PLAIN, 12);
+        this.setFont(customFont);
+        this.setIconImage(new ImageIcon("../../assets/favicon.png").getImage());
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("ID");
@@ -36,7 +41,45 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
+        JetBrainsMonoFont geistFont = new JetBrainsMonoFont();
+        geistFont.useJetBrainsMonoFont();
+
+        Font customFont = new Font("JetBrains Mono", Font.PLAIN, 12);
+        setUIFont(customFont);
+
         SwingUtilities.invokeLater(Main::new);
+    }
+
+    private static void setUIFont(Font font) {
+        UIManager.put("Button.font", font);
+        UIManager.put("CheckBox.font", font);
+        UIManager.put("RadioButton.font", font);
+        UIManager.put("ComboBox.font", font);
+        UIManager.put("Label.font", font);
+        UIManager.put("List.font", font);
+        UIManager.put("MenuBar.font", font);
+        UIManager.put("MenuItem.font", font);
+        UIManager.put("RadioButtonMenuItem.font", font);
+        UIManager.put("CheckBoxMenuItem.font", font);
+        UIManager.put("PopupMenu.font", font);
+        UIManager.put("OptionPane.font", font);
+        UIManager.put("Panel.font", font);
+        UIManager.put("ScrollPane.font", font);
+        UIManager.put("Spinner.font", font);
+        UIManager.put("TabbedPane.font", font);
+        UIManager.put("Table.font", font);
+        UIManager.put("TableHeader.font", font);
+        UIManager.put("TextField.font", font);
+        UIManager.put("PasswordField.font", font);
+        UIManager.put("TextArea.font", font);
+        UIManager.put("TextPane.font", font);
+        UIManager.put("EditorPane.font", font);
+        UIManager.put("TitledBorder.font", font);
+        UIManager.put("ToolBar.font", font);
+        UIManager.put("ToolTip.font", font);
+        UIManager.put("Tree.font", font);
+        UIManager.put("InternalFrame.titleFont", font);
+        UIManager.put("TitledBorder.font", font);
     }
 
     private void loadRecords() {
