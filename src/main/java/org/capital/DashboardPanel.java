@@ -32,12 +32,15 @@ public class DashboardPanel extends JPanel {
         panel.setBorder(BorderFactory.createTitledBorder("Recent Transactions"));
 
         List<Transaction> recentTransactions = getLast10Transactions();
-        List<Transaction> newtransactions = new ArrayList<>();
+        List<Transaction> newTransactions = new ArrayList<>();
         String[] columnNames = {"Item", "Amount", "Method", "Date"};
 
         DefaultTableModel recentTransactionsModel = new DefaultTableModel(columnNames, 0);
+        JTable transactionsTable = new JTable(recentTransactionsModel);
+
         JButton button = new JButton("Refresh");
-        button.setPreferredSize(new Dimension(100, 30));
+        button.setPreferredSize(new Dimension(30, 20));
+
         button.addActionListener(e -> {
             try (Connection connection = PostgresConnection.getConnection()) {
                 String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY created_at DESC LIMIT 1";
@@ -49,20 +52,20 @@ public class DashboardPanel extends JPanel {
                             String method = resultSet.getString("method");
                             String createdAt = resultSet.getString("created_at");
 
-                            newtransactions.add(new Transaction(item, amount, method, createdAt));
+                            newTransactions.add(new Transaction(item, amount, method, createdAt));
                         }
                     }
                 }
-            } catch (SQLException ec) {
-                ec.getMessage();
+            } catch (SQLException exception) {
+                exception.getMessage();
             }
 
-            for (Transaction transaction : newtransactions) {
+            for (Transaction transaction : newTransactions) {
                 recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
             }
         });
-        JTable transactionsTable = new JTable(recentTransactionsModel);
-        panel.add(button, BorderLayout.AFTER_LINE_ENDS);
+
+        panel.add(button, BorderLayout.PAGE_END);
 
         for (Transaction transaction : recentTransactions) {
             recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
