@@ -15,7 +15,7 @@ public class Main extends JFrame {
 
         Font customFont = new Font("JetBrains Mono", Font.PLAIN, 12);
         this.setFont(customFont);
-        this.setIconImage(new ImageIcon("../../assets/favicon.ico").getImage());
+        this.setIconImage(new ImageIcon("../../assets/favicon.png").getImage());
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("ID");
@@ -34,10 +34,15 @@ public class Main extends JFrame {
         tabbedPane.addTab("Account", new AccountPanel());
 
         add(tabbedPane);
-
         setVisible(true);
 
-        loadRecords();
+        boolean isLoggedIn = false;
+        if (!isLoggedIn) {
+            new LoginUser().setVisible(true);
+            dispose();
+        } else {
+            loadRecords();
+        }
     }
 
     public static void main(String[] args) {
