@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="521075a8-ea8e-4ccd-ac3b-ebf4c3bc0518" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/Capital.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/SignUpUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/WelcomeScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/Capital.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/Capital.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/DashboardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/DashboardPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/HistoryPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/HistoryPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/InsertPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/InsertPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/LoginUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/PostgresConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/PostgresConnection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +43,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -67,7 +71,7 @@
     &quot;Gradle.capital [:Main.main()].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;vgseven&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/OPENSOURCE/CAPITAL/capital&quot;,
@@ -82,6 +86,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="org.capital" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="org.capital.Main" />
