@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginUser extends JFrame implements ActionListener {
     private final JTextField usernameField;
@@ -67,15 +71,24 @@ public class LoginUser extends JFrame implements ActionListener {
 
         if (isValidUser(username, password)) {
             this.setVisible(false);
-            Capital capital = new Capital();
-            capital.setVisible(true);
 
+            Capital capital = new Capital(username + "_transactions");
+            capital.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private boolean isValidUser(String username, String password) {
-        return username.equals("capital") && password.equals("seven");
+        try (Connection conn = PostgresConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE user_name = ? AND password = ?")) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException ex) {
+            ex.getMessage();
+            return false;
+        }
     }
 }

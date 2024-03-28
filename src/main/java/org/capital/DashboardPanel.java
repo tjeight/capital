@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardPanel extends JPanel {
+    private final String transactionTableName;
 
-    public DashboardPanel() {
+    public DashboardPanel(String transactionTableName) {
+        this.transactionTableName = transactionTableName;
+
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -33,26 +36,27 @@ public class DashboardPanel extends JPanel {
 
         List<Transaction> recentTransactions = getLast10Transactions();
         List<Transaction> newTransactions = new ArrayList<>();
-        String[] columnNames = {"Item", "Amount", "Method", "Date"};
+        String[] columnNames = {"Item", "Amount", "Method", "Date", "Tag"};
 
         DefaultTableModel recentTransactionsModel = new DefaultTableModel(columnNames, 0);
         JTable transactionsTable = new JTable(recentTransactionsModel);
 
-        JButton button = new JButton("Refresh");
+        JButton button = new JButton("Refresh Transactions");
         button.setPreferredSize(new Dimension(30, 20));
 
         button.addActionListener(e -> {
             try (Connection connection = PostgresConnection.getConnection()) {
-                String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY created_at DESC LIMIT 1";
+                String sql = "SELECT item_name, item_amount, transaction_method, transaction_date, transaction_tag FROM " + transactionTableName + " ORDER BY transaction_date DESC LIMIT 1";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     try (ResultSet resultSet = statement.executeQuery()) {
                         while (resultSet.next()) {
-                            String item = resultSet.getString("item");
-                            double amount = resultSet.getDouble("amount");
-                            String method = resultSet.getString("method");
-                            String createdAt = resultSet.getString("created_at");
+                            String item = resultSet.getString("item_name");
+                            double amount = resultSet.getDouble("item_amount");
+                            String method = resultSet.getString("transaction_method");
+                            String createdAt = resultSet.getString("transaction_date");
+                            String transactionTag = resultSet.getString("transaction_tag");
 
-                            newTransactions.add(new Transaction(item, amount, method, createdAt));
+                            newTransactions.add(new Transaction(item, amount, method, createdAt, transactionTag));
                         }
                     }
                 }
@@ -61,14 +65,14 @@ public class DashboardPanel extends JPanel {
             }
 
             for (Transaction transaction : newTransactions) {
-                recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
+                recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt, transaction.transactionTag});
             }
         });
 
         panel.add(button, BorderLayout.PAGE_END);
 
         for (Transaction transaction : recentTransactions) {
-            recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt});
+            recentTransactionsModel.addRow(new Object[]{transaction.item, transaction.amount, transaction.method, transaction.createdAt, transaction.transactionTag});
         }
 
         transactionsTable.setEnabled(false);
@@ -108,16 +112,17 @@ public class DashboardPanel extends JPanel {
         List<Transaction> transactions = new ArrayList<>();
 
         try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY created_at DESC LIMIT 10";
+            String sql = "SELECT item_name, item_amount, transaction_method, transaction_date, transaction_tag FROM " + transactionTableName + " ORDER BY transaction_date DESC LIMIT 10";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        String item = resultSet.getString("item");
-                        double amount = resultSet.getDouble("amount");
-                        String method = resultSet.getString("method");
-                        String createdAt = resultSet.getString("created_at");
+                        String item = resultSet.getString("item_name");
+                        double amount = resultSet.getDouble("item_amount");
+                        String method = resultSet.getString("transaction_method");
+                        String createdAt = resultSet.getString("transaction_date");
+                        String transactionTag = resultSet.getString("transaction_tag");
 
-                        transactions.add(new Transaction(item, amount, method, createdAt));
+                        transactions.add(new Transaction(item, amount, method, createdAt, transactionTag));
                     }
                 }
             }
@@ -132,7 +137,7 @@ public class DashboardPanel extends JPanel {
         double balance = 0.0;
 
         try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT SUM(amount) AS balance FROM expenses";
+            String sql = "SELECT SUM(item_amount) AS balance FROM " + transactionTableName;
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
@@ -157,16 +162,17 @@ public class DashboardPanel extends JPanel {
         Transaction biggestTransaction = null;
 
         try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT item, amount, method, created_at FROM expenses ORDER BY amount DESC LIMIT 1";
+            String sql = "SELECT item_name, item_amount, transaction_method, transaction_date FROM " + transactionTableName + " ORDER BY item_amount DESC LIMIT 3";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        String item = resultSet.getString("item");
-                        double amount = resultSet.getDouble("amount");
-                        String method = resultSet.getString("method");
-                        String createdAt = resultSet.getString("created_at");
+                        String item = resultSet.getString("item_name");
+                        double amount = resultSet.getDouble("item_amount");
+                        String method = resultSet.getString("transaction_method");
+                        String createdAt = resultSet.getString("transaction_date");
+                        String transactionTag = resultSet.getString("transaction_tag");
 
-                        biggestTransaction = new Transaction(item, amount, method, createdAt);
+                        biggestTransaction = new Transaction(item, amount, method, createdAt, transactionTag);
                     }
                 }
             }
@@ -177,6 +183,6 @@ public class DashboardPanel extends JPanel {
         return biggestTransaction;
     }
 
-    private record Transaction(String item, double amount, String method, String createdAt) {
+    private record Transaction(String item, double amount, String method, String createdAt, String transactionTag) {
     }
 }

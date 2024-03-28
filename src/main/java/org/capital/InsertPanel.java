@@ -9,11 +9,14 @@ import java.sql.*;
 public class InsertPanel extends JPanel {
 
     private final DefaultTableModel tableModel;
-    JTextField itemField = new JTextField();
-    JTextField amountField = new JTextField();
-    JTextField methodField = new JTextField();
+    private final String transactionTableName;
+    private final JTextField itemField = new JTextField();
+    private final JTextField amountField = new JTextField();
+    private final JTextField methodField = new JTextField();
+    private final JTextField tagField = new JTextField();
 
-    public InsertPanel(DefaultTableModel tableModel) {
+    public InsertPanel(DefaultTableModel tableModel, String transactionTableName) {
+        this.transactionTableName = transactionTableName;
         this.tableModel = tableModel;
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -61,43 +64,53 @@ public class InsertPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(methodField, gbc);
 
-        JButton insertButton = new JButton("Insert New Record");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        panel.add(new JLabel("Tag:"), gbc);
+
         gbc.gridx = 1;
         gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(tagField, gbc);
+
+        JButton insertButton = new JButton("Insert New Record");
+        gbc.gridx = 1;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(insertButton, gbc);
 
-        insertButton.addActionListener(e -> insertNewRecord(itemField.getText(), amountField.getText(), methodField.getText()));
+        insertButton.addActionListener(e -> insertNewRecord(itemField.getText(), amountField.getText(), methodField.getText(), tagField.getText()));
 
         return panel;
     }
 
-    private void insertNewRecord(String item, String amount, String method) {
+    private void insertNewRecord(String item, String amount, String method, String tag) {
         try {
-            if (item.isEmpty() || amount.isEmpty() || method.isEmpty()) {
+            if (item.isEmpty() || amount.isEmpty() || method.isEmpty() || tag.isEmpty()) {
                 throw new IllegalArgumentException("Please fill in all fields.");
             }
 
             double parsedAmount = Double.parseDouble(amount);
 
-            Object[] newData = {null, item, parsedAmount, null, method};
-            tableModel.addRow(newData);
-
             try (Connection connection = PostgresConnection.getConnection()) {
-                String sql = "INSERT INTO expenses (Item, Amount, Method) VALUES (?, ?, ?) RETURNING ID, created_at";
+                String sql = "INSERT INTO " + transactionTableName + " (item_name, item_amount, transaction_method, transaction_tag) VALUES (?, ?, ?, ?) RETURNING transaction_id, transaction_date";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     statement.setString(1, item);
                     statement.setDouble(2, parsedAmount);
                     statement.setString(3, method);
+                    statement.setString(4, tag);
 
                     try (ResultSet resultSet = statement.executeQuery()) {
                         if (resultSet.next()) {
-                            int generatedId = resultSet.getInt("ID");
-                            Timestamp createdAt = resultSet.getTimestamp("created_at");
+                            int generatedId = resultSet.getInt("transaction_id");
+                            Timestamp createdAt = resultSet.getTimestamp("transaction_date");
 
-                            tableModel.setValueAt(generatedId, tableModel.getRowCount() - 1, 0);
-                            tableModel.setValueAt(createdAt, tableModel.getRowCount() - 1, 3);
+                            Object[] newData = {generatedId, item, parsedAmount, createdAt, method, tag};
+                            tableModel.addRow(newData);
                         }
                     }
                 }
@@ -106,6 +119,7 @@ public class InsertPanel extends JPanel {
             itemField.setText("");
             amountField.setText("");
             methodField.setText("");
+            tagField.setText("");
 
         } catch (SQLException | IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, "Invalid input. " + ex.getMessage());

@@ -7,8 +7,10 @@ import java.sql.*;
 
 public class Capital extends JFrame {
     private final DefaultTableModel tableModel;
+    private final String transactionTableName;
 
-    public Capital() {
+    public Capital(String transactionTableName) {
+        this.transactionTableName = transactionTableName;
         setTitle("Capital");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 600);
@@ -25,12 +27,13 @@ public class Capital extends JFrame {
         tableModel.addColumn("Amount");
         tableModel.addColumn("Date");
         tableModel.addColumn("Method");
+        tableModel.addColumn("Tag");
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        tabbedPane.addTab("Dashboard", new DashboardPanel());
-        tabbedPane.addTab("Insert", new InsertPanel(tableModel));
-        tabbedPane.addTab("History", new HistoryPanel(tableModel));
+        tabbedPane.addTab("Dashboard", new DashboardPanel(transactionTableName));
+        tabbedPane.addTab("Insert", new InsertPanel(tableModel, transactionTableName));
+        tabbedPane.addTab("History", new HistoryPanel(tableModel, transactionTableName));
         tabbedPane.addTab("Balance", new BalancePanel());
         tabbedPane.addTab("Insights", new InsightsPanel());
         tabbedPane.addTab("Account", new AccountPanel());
@@ -75,17 +78,18 @@ public class Capital extends JFrame {
 
     private void loadRecords() {
         try (Connection connection = PostgresConnection.getConnection()) {
-            String sql = "SELECT * FROM expenses";
+            String sql = "SELECT * FROM " + transactionTableName;
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        int id = resultSet.getInt("ID");
-                        String item = resultSet.getString("Item");
-                        double amount = resultSet.getDouble("Amount");
-                        Timestamp createdAt = resultSet.getTimestamp("created_at");
-                        String method = resultSet.getString("Method");
+                        int id = resultSet.getInt("transaction_id");
+                        String item = resultSet.getString("item_name");
+                        double amount = resultSet.getDouble("item_amount");
+                        Timestamp createdAt = resultSet.getTimestamp("transaction_date");
+                        String method = resultSet.getString("transaction_method");
+                        String tag = resultSet.getString("transaction_tag");
 
-                        Object[] rowData = {id, item, amount, createdAt, method};
+                        Object[] rowData = {id, item, amount, createdAt, method, tag};
                         tableModel.addRow(rowData);
                     }
                 }
