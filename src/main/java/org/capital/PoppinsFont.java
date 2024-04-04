@@ -6,12 +6,12 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
-public class JetBrainsMonoFont {
-    public void useJetBrainsMonoFont() {
+public class PoppinsFont {
+    public void usePoppinsFont() {
         try {
-            File fontSansFile = new File("../../assets/JetBrainsMono-Regular.ttf");
+            File fontFile = new File("../../assets/Poppins-Regular.ttf");
 
-            Font fontSans = Font.createFont(Font.TRUETYPE_FONT, fontSansFile);
+            Font fontSans = Font.createFont(Font.TRUETYPE_FONT, fontFile);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(fontSans);

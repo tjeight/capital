@@ -7,10 +7,8 @@ import java.awt.*;
 
 public class HistoryPanel extends JPanel {
     private final DefaultTableModel tableModel;
-    private final String transationTableName;
 
-    public HistoryPanel(DefaultTableModel tableModel, String transactionTableName) {
-        this.transationTableName = transactionTableName;
+    public HistoryPanel(DefaultTableModel tableModel) {
         this.tableModel = tableModel;
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
