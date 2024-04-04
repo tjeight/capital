@@ -14,13 +14,17 @@ public class SignUpUser extends JFrame implements ActionListener {
     private final JTextField bankNameField;
     private final JTextField usernameField;
     private final JPasswordField passwordField;
-    private final JButton signUpButton;
 
     public SignUpUser() {
         setTitle("Sign Up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 400);
+        setSize(600, 550);
         setLocationRelativeTo(null);
+
+        PoppinsFont poppinsFont = new PoppinsFont();
+        poppinsFont.usePoppinsFont();
+
+        Font usePoppinsFont = new Font("Poppins", Font.PLAIN, 12);
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -31,62 +35,63 @@ public class SignUpUser extends JFrame implements ActionListener {
 
         // Name Label
         JLabel nameLabel = new JLabel("Full Name:");
-        nameLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        nameLabel.setFont(usePoppinsFont);
         mainPanel.add(nameLabel, gbc);
 
         // Name Field
         gbc.gridx = 1;
         nameField = new JTextField(20);
-        nameField.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        nameField.setFont(usePoppinsFont);
         mainPanel.add(nameField, gbc);
 
         // Bank Name Label
         gbc.gridx = 0;
         gbc.gridy = 1;
         JLabel bankNameLabel = new JLabel("Bank Name:");
-        bankNameLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        bankNameLabel.setFont(usePoppinsFont);
         mainPanel.add(bankNameLabel, gbc);
 
         // Bank Name Field
         gbc.gridx = 1;
         bankNameField = new JTextField(20);
-        bankNameField.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        bankNameField.setFont(usePoppinsFont);
         mainPanel.add(bankNameField, gbc);
 
         // Username Label
         gbc.gridx = 0;
         gbc.gridy = 2;
         JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        usernameLabel.setFont(usePoppinsFont);
         mainPanel.add(usernameLabel, gbc);
 
         // Username Field
         gbc.gridx = 1;
         usernameField = new JTextField(20);
-        usernameField.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        usernameField.setFont(usePoppinsFont);
         mainPanel.add(usernameField, gbc);
 
         // Password Label
         gbc.gridx = 0;
         gbc.gridy = 3;
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        passwordLabel.setFont(usePoppinsFont);
         mainPanel.add(passwordLabel, gbc);
 
         // Password Field
         gbc.gridx = 1;
         passwordField = new JPasswordField(20);
-        passwordField.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        passwordField.setFont(usePoppinsFont);
         mainPanel.add(passwordField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        signUpButton = new JButton("Sign Up");
+
+        JButton signUpButton = new JButton("Sign Up");
         signUpButton.setBackground(Color.BLACK);
         signUpButton.setForeground(Color.WHITE);
-        signUpButton.setFont(new Font("JetBrains Mono", Font.PLAIN, 12));
+        signUpButton.setFont(usePoppinsFont);
         signUpButton.setBorderPainted(false);
         signUpButton.setFocusPainted(false);
         signUpButton.setContentAreaFilled(false);
@@ -95,18 +100,43 @@ public class SignUpUser extends JFrame implements ActionListener {
         signUpButton.addActionListener(this);
         mainPanel.add(signUpButton, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(usePoppinsFont);
+        backButton.setBorderPainted(false);
+        backButton.setFocusPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setOpaque(true);
+        backButton.setPreferredSize(new Dimension(120, 40));
+        backButton.addActionListener(this);
+        mainPanel.add(backButton, gbc);
+
         add(mainPanel);
         setVisible(true);
+
+        backButton.addActionListener(e -> {
+            new WelcomeScreen().setVisible(true);
+            this.setVisible(false);
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == signUpButton) {
-            String name = nameField.getText();
-            String bankName = bankNameField.getText();
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
 
+        String name = nameField.getText();
+        String bankName = bankNameField.getText();
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+
+        if (name.isBlank() || bankName.isBlank() || username.isBlank() || password.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Please enter valid details..");
+        } else {
             if (isUserExists(username)) {
                 JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
                 usernameField.setText("");
@@ -123,6 +153,7 @@ public class SignUpUser extends JFrame implements ActionListener {
                 }
             }
         }
+
     }
 
     private boolean isUserExists(String username) {
@@ -152,7 +183,7 @@ public class SignUpUser extends JFrame implements ActionListener {
     }
 
     private void createUserTable(String username) {
-        try (Connection conn = PostgresConnection.getConnection(); PreparedStatement createTableStmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS " + username + "_transactions (transaction_id SERIAL PRIMARY KEY, item_name VARCHAR(255), item_amount DECIMAL(10,2), transaction_method VARCHAR(50), transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, transaction_tag VARCHAR(50))")) {
+        try (Connection conn = PostgresConnection.getConnection(); PreparedStatement createTableStmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS " + username + "_transactions (transaction_id SERIAL PRIMARY KEY, item_name VARCHAR(255) NOT NULL, item_amount DECIMAL(10,2) NOT NULL, transaction_method VARCHAR(50) NOT NULL, transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, transaction_tag VARCHAR(50) NOT NULL)")) {
             createTableStmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

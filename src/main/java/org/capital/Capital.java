@@ -15,11 +15,11 @@ public class Capital extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 600);
 
-        JetBrainsMonoFont monoFont = new JetBrainsMonoFont();
-        monoFont.useJetBrainsMonoFont();
+        PoppinsFont poppinsFont = new PoppinsFont();
+        poppinsFont.usePoppinsFont();
 
-        Font jetBrainsMono = new Font("JetBrains Mono", Font.PLAIN, 12);
-        setUIFont(jetBrainsMono);
+        Font usePoppinsFont = new Font("Poppins", Font.PLAIN, 12);
+        setUIFont(usePoppinsFont);
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("ID");
@@ -31,12 +31,15 @@ public class Capital extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
+        tabbedPane.setBackground(Color.BLACK);
+        tabbedPane.setForeground(Color.WHITE);
+        tabbedPane.setBorder(null);
         tabbedPane.addTab("Dashboard", new DashboardPanel(transactionTableName));
         tabbedPane.addTab("Insert", new InsertPanel(tableModel, transactionTableName));
-        tabbedPane.addTab("History", new HistoryPanel(tableModel, transactionTableName));
-        tabbedPane.addTab("Balance", new BalancePanel());
-        tabbedPane.addTab("Insights", new InsightsPanel());
-        tabbedPane.addTab("Account", new AccountPanel());
+        tabbedPane.addTab("History", new HistoryPanel(tableModel));
+        tabbedPane.addTab("Net Worth", new NetWorthPanel());
+        tabbedPane.addTab("Insights", new InsightsPanel(transactionTableName));
+        tabbedPane.addTab("Account", new AccountPanel(transactionTableName));
 
         add(tabbedPane);
         setVisible(true);
@@ -74,6 +77,8 @@ public class Capital extends JFrame {
         UIManager.put("Tree.font", font);
         UIManager.put("InternalFrame.titleFont", font);
         UIManager.put("TitledBorder.font", font);
+        UIManager.put("TabbedPane.selected", new Color(63, 63, 63));
+        UIManager.put("TabbedPane.focus", new Color(0, 0, 0, 0));
     }
 
     private void loadRecords() {

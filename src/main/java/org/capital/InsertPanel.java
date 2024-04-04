@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.*;
+import java.util.Objects;
 
 public class InsertPanel extends JPanel {
 
@@ -12,8 +13,8 @@ public class InsertPanel extends JPanel {
     private final String transactionTableName;
     private final JTextField itemField = new JTextField();
     private final JTextField amountField = new JTextField();
-    private final JTextField methodField = new JTextField();
-    private final JTextField tagField = new JTextField();
+    private final JComboBox<String> methodComboBox = new JComboBox<>(new String[]{"Cash", "Debit Card", "Credit Card", "Jupiter", "GPay"});
+    private final JComboBox<String> tagComboBox = new JComboBox<>(new String[]{"Groceries", "Services", "Health", "Travel", "Other", "Food", "Transfer", "Invested", "Refunds", "Credit"});
 
     public InsertPanel(DefaultTableModel tableModel, String transactionTableName) {
         this.transactionTableName = transactionTableName;
@@ -38,6 +39,7 @@ public class InsertPanel extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        itemField.setPreferredSize(new Dimension(300, 25));
         panel.add(itemField, gbc);
 
         gbc.gridx = 0;
@@ -50,6 +52,7 @@ public class InsertPanel extends JPanel {
         gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        amountField.setPreferredSize(new Dimension(300, 25));
         panel.add(amountField, gbc);
 
         gbc.gridx = 0;
@@ -62,7 +65,8 @@ public class InsertPanel extends JPanel {
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(methodField, gbc);
+        methodComboBox.setPreferredSize(new Dimension(300, 25));
+        panel.add(methodComboBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -74,24 +78,31 @@ public class InsertPanel extends JPanel {
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(tagField, gbc);
+        tagComboBox.setPreferredSize(new Dimension(300, 25));
+        panel.add(tagComboBox, gbc);
 
         JButton insertButton = new JButton("Insert New Record");
+        insertButton.setBackground(Color.BLACK);
+        insertButton.setForeground(Color.WHITE);
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(insertButton, gbc);
 
-        insertButton.addActionListener(e -> insertNewRecord(itemField.getText(), amountField.getText(), methodField.getText(), tagField.getText()));
+        insertButton.addActionListener(e -> {
+            insertNewRecord(itemField.getText(), amountField.getText(), Objects.requireNonNull(methodComboBox.getSelectedItem()).toString(), Objects.requireNonNull(tagComboBox.getSelectedItem()).toString());
+        });
 
         return panel;
     }
 
     private void insertNewRecord(String item, String amount, String method, String tag) {
         try {
-            if (item.isEmpty() || amount.isEmpty() || method.isEmpty() || tag.isEmpty()) {
-                throw new IllegalArgumentException("Please fill in all fields.");
+            if (item.isEmpty() || amount.isEmpty()) {
+                throw new IllegalArgumentException("Please fill in the Item and Amount fields.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Record Inserted Successfully..");
             }
 
             double parsedAmount = Double.parseDouble(amount);
@@ -118,8 +129,6 @@ public class InsertPanel extends JPanel {
 
             itemField.setText("");
             amountField.setText("");
-            methodField.setText("");
-            tagField.setText("");
 
         } catch (SQLException | IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(this, "Invalid input. " + ex.getMessage());

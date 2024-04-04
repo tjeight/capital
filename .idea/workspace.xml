@@ -5,15 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="521075a8-ea8e-4ccd-ac3b-ebf4c3bc0518" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/SignUpUser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/capital/WelcomeScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/Poppins-Regular.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/JetBrainsMono-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/AccountPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/AccountPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/BalancePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/NetWorthPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/Capital.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/Capital.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/DashboardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/DashboardPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/HistoryPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/HistoryPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/InsertPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/InsertPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/LoginUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/InsightsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/InsightsPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/JetBrainsMonoFont.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/PoppinsFont.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/SignInUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/SignUpUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/SignUpUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/capital/WelcomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/capital/WelcomeScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,11 +79,11 @@
     &quot;git-widget-placeholder&quot;: &quot;vgseven&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/OPENSOURCE/CAPITAL/capital&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/OPENSOURCE/CAPITAL/capital/src/assets&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;database.query.execution&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -87,6 +92,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\OPENSOURCE\CAPITAL\capital\src\assets" />
+    </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="org.capital" />
     </key>
